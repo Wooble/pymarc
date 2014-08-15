@@ -6,7 +6,8 @@
 |_|    |___/
 ```
 
-[![Build Status](https://travis-ci.org/edsu/pymarc.svg)](http://travis-ci.org/edsu/pymarc)
+[![Build Status](https://travis-ci.org/Wooble/pymarc.svg?branch=coverage)](https://travis-ci.org/Wooble/pymarc)
+[![Coverage Status](https://coveralls.io/repos/Wooble/pymarc/badge.png?branch=coverage)](https://coveralls.io/r/Wooble/pymarc?branch=coverage)
 
 pymarc is a python library for working with bibliographic data encoded in 
 [MARC21](http://en.wikipedia.org/wiki/MARC_standards). It should work under
