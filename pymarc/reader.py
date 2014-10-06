@@ -128,7 +128,7 @@ class JSONReader(Reader):
         if hasattr(self.records,'__iter__') and not isinstance(self.records, dict):
         	self.iter = iter(self.records)
         else:
-        	self.iter = iter([self.records])
+            self.iter = iter([self.records])
         return self
 
     def __next__(self):
