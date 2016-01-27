@@ -10,7 +10,7 @@ class MARCReaderFileTest(unittest.TestCase):
     """
     Tests for the pymarc.MARCReader class which provides iterator
     based access to a MARC file.
-    """ 
+    """
 
     def setUp(self):
         self.reader = pymarc.MARCReader(open('test/test.dat', 'rb'))
@@ -23,7 +23,7 @@ class MARCReaderFileTest(unittest.TestCase):
         count = 0
         for record in self.reader:
             count += 1
-        self.assertEqual(count, 10, 
+        self.assertEqual(count, 10,
                 'found expected number of MARC21 records')
 
     def test_map_records(self):
@@ -54,12 +54,6 @@ class MARCReaderFileTest(unittest.TestCase):
             self.assertTrue(starts_with_leader.search(text), 'got leader')
             self.assertTrue(has_numeric_tag.search(text), 'got a tag')
 
-    def test_url(self):
-        reader = pymarc.MARCReader(urlopen(
-            'http://inkdroid.org/data/marc.dat'))
-        record = next(reader)
-        self.assertEqual(record['245']['a'], 'Python pocket reference /')
-
     def disabled_test_codecs(self):
         import codecs
         with codecs.open('test/test.dat', encoding='utf-8') as fh:
@@ -81,7 +75,7 @@ class MARCReaderFileTest(unittest.TestCase):
             self.assertEqual(record['752']['a'], 'Russian Federation')
             self.assertEqual(record['752']['b'], 'Kostroma Oblast')
             self.assertEqual(record['752']['d'], 'Kostroma')
-            
+
 
 class MARCReaderStringTest(MARCReaderFileTest):
 

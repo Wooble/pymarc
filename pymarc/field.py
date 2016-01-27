@@ -34,7 +34,7 @@ class Field(Iterator):
         if subfields == None:
             subfields = []
         indicators = [text_type(x) for x in indicators]
-        
+
         # attempt to normalize integer tags if necessary
         try:
             self.tag = '%03i' % int(tag)
@@ -123,6 +123,8 @@ class Field(Iterator):
 
     def __next__(self):
         "Needed for iteration."
+        if not hasattr(self, 'subfields'):
+            raise StopIteration
         while self.__pos < len(self.subfields):
             subfield = (self.subfields[ self.__pos ],
                 self.subfields[ self.__pos+1 ])
