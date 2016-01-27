@@ -10,7 +10,7 @@ from six import text_type, binary_type
 from pymarc import marc8_to_unicode, Field, Record, MARCReader, MARCWriter
 
 class MARC8Test(TestCase):
-    
+
     def test_marc8_reader(self):
         with open('test/marc8.dat', 'rb') as fh:
             reader = MARCReader(fh, to_unicode=False)
@@ -28,15 +28,15 @@ class MARC8Test(TestCase):
             utitle = r['240']['a']
             self.assertEqual(type(utitle), text_type)
             self.assertEqual(utitle, u'De la solitude \xe0 la communaut\xe9.')
-        
+
     def test_marc8_reader_to_unicode_bad_eacc_sequence(self):
         with open('test/bad_eacc_encoding.dat', 'rb') as fh:
             reader = MARCReader(fh, to_unicode=True, hide_utf8_warnings=True)
             try:
                 r = next(reader)
-                self.assertFalse("Was able to decode invalid MARC8") 
+                self.assertFalse("Was able to decode invalid MARC8")
             except UnicodeDecodeError:
-                self.assertTrue("Caught UnicodeDecodeError as expected") 
+                self.assertTrue("Caught UnicodeDecodeError as expected")
 
     def test_marc8_reader_to_unicode_bad_escape(self):
         with open('test/bad_marc8_escape.dat', 'rb') as fh:
@@ -120,7 +120,7 @@ class MARC8Test(TestCase):
 
         # force reading as utf-8
         with open('test/utf8_without_leader_flag.dat', 'rb') as fh:
-            reader = MARCReader(fh, to_unicode=True, force_utf8=True, 
+            reader = MARCReader(fh, to_unicode=True, force_utf8=True,
                                 hide_utf8_warnings=True)
             record = next(reader)
             self.assertEqual(type(record), Record)
@@ -134,9 +134,24 @@ class MARC8Test(TestCase):
         self.assertEqual(r.leader[9], 'a')
 
     def test_subscript_2(self):
-        self.assertEqual(marc8_to_unicode(b'CO\x1bb2\x1bs is a gas'), u'CO\u2082 is a gas')
+        self.assertEqual(marc8_to_unicode(b'CO\x1bb2\x1bs is a gas'),
+                         u'CO\u2082 is a gas')
         self.assertEqual(marc8_to_unicode(b'CO\x1bb2\x1bs'), u'CO\u2082')
+
+    def test_eszett_euro(self):
+        # MARC-8 mapping: Revised June 2004 to add the Eszett (M+C7) and the
+        # Euro Sign (M+C8) to the MARC-8 set.
+        self.assertEqual(marc8_to_unicode(b'ESZETT SYMBOL: \xc7 is U+00DF'),
+                         u'ESZETT SYMBOL: \u00df is U+00DF')
+        self.assertEqual(marc8_to_unicode(b'EURO SIGN: \xc8 is U+20AC'),
+                         u'EURO SIGN: \u20ac is U+20AC')
+
+    def test_alif(self):
+        # MARC-8 mapping: Revised March 2005 to change the mapping from MARC-8
+        # to Unicode for the Alif (M+2E) from U+02BE to U+02BC.
+        self.assertEqual(marc8_to_unicode(b'ALIF: \xae is U+02BC'),
+                         u'ALIF: \u02bc is U+02BC')
 
 def suite():
     test_suite = makeSuite(MARC8Test, 'test')
-    return test_suite 
+    return test_suite
