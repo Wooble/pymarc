@@ -1,6 +1,7 @@
 import re
 import six
 import logging
+import warnings
 
 from six import Iterator
 
@@ -228,7 +229,13 @@ class Record(Iterator):
 
         """
         # extract record leader
-        self.leader = marc[0:LEADER_LEN].decode('ascii')
+        try:
+            self.leader = marc[0:LEADER_LEN].decode('ascii')
+        except UnicodeDecodeError:
+            leader = marc[0:LEADER_LEN-4] + b'4500'
+            warnings.warn("Replacing bad leader %s with %s"
+                          % (marc[0:LEADER_LEN], leader))
+            self.leader = leader.decode('ascii')
         if len(self.leader) != LEADER_LEN:
             raise RecordLeaderInvalid
 
