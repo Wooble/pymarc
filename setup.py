@@ -1,8 +1,8 @@
-version = '3.1.1'
+version = '3.1.5'
 
 from setuptools import setup
 
-install_requires = ['six']
+install_requires = ['six>=1.9.0']
 try:
     import xml.etree
 except ImportError:
