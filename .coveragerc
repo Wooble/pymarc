@@ -5,3 +5,5 @@ source = pymarc,test
 exclude_lines =
     pragma: no cover
     def disabled
+    if __name__ == .__main__.:
+    def suite
