@@ -1,2 +1,7 @@
 [run]
 source = pymarc,test
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def disabled
