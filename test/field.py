@@ -1,7 +1,7 @@
 import unittest
 import sys
 
-from pymarc.field import Field
+from pymarc.field import Field, RawField
 
 class FieldTest(unittest.TestCase):
 
@@ -157,6 +157,19 @@ class FieldTest(unittest.TestCase):
         self.assertEqual(self.field['b'], 'An American Odyssey')
         self.field.delete_subfield('b')
         self.assertTrue(self.field['b'] is None)
+
+
+class RawFieldTest(unittest.TestCase):
+    def setUp(self):
+        self.field = RawField(
+            tag='009',
+            data=b'Some Raw Data\xde\xad\xbe\xef',
+        )
+
+    def test_string(self):
+        self.assertEqual(str(self.field),
+                         "=009  b'Some\\Raw\\Data\xde\xad\xbe\xef'")
+
 
 def suite():
     test_suite = unittest.makeSuite(FieldTest, 'test')
