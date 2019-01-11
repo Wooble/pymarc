@@ -4,9 +4,13 @@ import logging
 
 from six import Iterator
 from six import text_type
+from six import PY2
 
 from pymarc.constants import SUBFIELD_INDICATOR, END_OF_FIELD
 from pymarc.marc8 import marc8_to_unicode
+
+if PY2:
+    ascii = repr
 
 
 class Field(Iterator):
@@ -262,6 +266,20 @@ class RawField(Field):
         for subfield in self:
             marc += SUBFIELD_INDICATOR.encode('ascii') + subfield[0] + subfield[1]
         return marc + END_OF_FIELD
+
+    def __str__(self):
+        if self.is_control_field():
+            text = '=%s  %s' % (self.tag, ascii(self.data).replace(' ','\\'))
+        else:
+            text = '=%s  ' % (self.tag)
+            for indicator in self.indicators:
+                if indicator in (' ','\\'):
+                    text += '\\'
+                else:
+                    text += '%s' % indicator
+            for subfield in self:
+                text += ('$%s%s' % subfield)
+        return text
 
 
 def map_marc8_field(f):

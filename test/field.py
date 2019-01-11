@@ -168,7 +168,7 @@ class RawFieldTest(unittest.TestCase):
 
     def test_string(self):
         self.assertEqual(str(self.field),
-                         "=009  b'Some\\Raw\\Data\xde\xad\xbe\xef'")
+                         r"=009  b'Some\Raw\Data\xde\xad\xbe\xef'")
 
 
 def suite():
