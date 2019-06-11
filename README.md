@@ -1,16 +1,17 @@
 ```
- _ __  _   _ _ __ ___   __ _ _ __ ___
-| '_ \| | | | '_ ` _ \ / _` | '__/ __|
-| |_) | |_| | | | | | | (_| | | | (__
-| .__/ \__, |_| |_| |_|\__,_|_|  \___|
-|_|    |___/
+_|_|_|    _|    _|  _|_|_|  _|_|      _|_|_|  _|  _|_|    _|_|_|
+_|    _|  _|    _|  _|    _|    _|  _|    _|  _|_|      _|
+_|    _|  _|    _|  _|    _|    _|  _|    _|  _|        _|
+_|_|_|      _|_|_|  _|    _|    _|    _|_|_|  _|          _|_|_|
+_|              _|
+_|          _|_|
 ```
 
 [![Build Status](https://travis-ci.org/Wooble/pymarc.svg?branch=coverage)](https://travis-ci.org/Wooble/pymarc)
 [![Coverage Status](https://coveralls.io/repos/Wooble/pymarc/badge.png?branch=coverage)](https://coveralls.io/r/Wooble/pymarc?branch=coverage)
 
 pymarc is a python library for working with bibliographic data encoded in
-[MARC21](http://en.wikipedia.org/wiki/MARC_standards). It should work under
+[MARC21](https://en.wikipedia.org/wiki/MARC_standards). It should work under
 python 2.x and 3.x. It provides an API for reading, writing and modifying
 MARC records. It was mostly designed to be an emergency eject seat, for
 getting your data assets out of MARC and into some kind of saner
@@ -22,6 +23,25 @@ as a format, MARC seems to be living quite happily as a zombie.
 Below are some common examples of how you might want to use pymarc. If
 you run across an example that you think should be here please send a
 pull request.
+
+### Installation
+
+You'll probably just want to use pip to install pymarc:
+
+    pip install pymarc
+
+If you'd like to download and install the latest source you'll need git:
+
+    git clone git://github.com/edsu/pymarc.git
+
+You'll also need [setuptools](https://pypi.python.org/pypi/setuptools#installation-instructions). Once you have the source and setuptools run the pymarc test
+suite to make sure things are in order with the distribution:
+
+    python setup.py test
+
+And then install:
+
+    python setup.py install
 
 ### Reading
 
@@ -76,7 +96,7 @@ print(record['245']['a'])
 ```
 
 Some fields like subjects can repeat. In cases like that you will want to use
-`get_fields` to get all of them as `pmarc.Field` objects, which you can then
+`get_fields` to get all of them as `pymarc.Field` objects, which you can then
 interact with further:
 
 ```python
@@ -127,31 +147,181 @@ with open('file.dat', 'wb') as out:
 ### JSON and XML
 
 If you find yourself using MARC data a fair bit, and distributing it, you may
-make other developers a bit happier by using the JSON or XML serializations.
-pymarc has support for both. The main benefit here is that the UTF8 character
-encoding is used, rather than the frustratingly archaic MARC8 encoding. Also
-they will be able to use JSON and XML tools to get at the data they want instead
-of some crazy MARC processing library like, ahem, pymarc.
+make other developers a bit happier by using the JSON or XML serializations. The
+main benefit to using XML or JSON is that the UTF8 character encoding is used,
+rather than the frustratingly archaic MARC8 encoding. Also they will be able to
+use standard JSON and XML reading/writing tools to get at the data they want
+instead of some crazy MARC processing library like, ahem, pymarc.
 
-Installation
-------------
+pymarc's support for JSON and XML is currently a bit lopsided and ad hoc. pymarc
+allows you to read XML in a variety of ways, but not write it. On the other hand
+pymarc allows you to write JSON, but not read it. Part of the reason for this
+unevenness is that the functionality was added to solve a particular need at a
+particular time. If you are interested in providing a more holistic solution
+pull requests (with unit tests) are always welcome.
 
-You'll probably just want to use pip to install pymarc:
+**XML**
 
-    pip install pymarc
+To parse a file of MARCXML records you can:
 
-If you'd like to download and install the latest source you'll need git:
+```python
 
-    git clone git://github.com/edsu/pymarc.git
+from pymarc import parse_xml_to_array
 
-You'll also need [setuptools](https://pypi.python.org/pypi/setuptools#installation-instructions). Once you have the source and setuptools run the pymarc test
-suite to make sure things are in order with the distribution:
+records = parse_xml_to_array('test/batch.xml')
+```
 
-    python setup.py test
+If you have a large XML file and would rather not read them all into memory you
+can:
 
-And then install:
+```python
 
-    python setup.py install
+from pymarc import map_xml
+
+def print_title(r):
+    print(r.title())
+
+map_xml(print_title, 'test/batch.xml')
+```
+
+Also, if you prefer you can pass in a file like object in addition to the path
+to both *map_xml* and *parse_xml_to_array*:
+
+```python
+records = parse_xml_to_array(open('batch.xml'))
+```
+
+**JSON**
+
+JSON support is fairly minimal in that you can call a `pymarc.Record`'s
+`as_json()` method to return JSON for a given MARC Record:
+
+```python
+from pymarc import MARCReader
+
+record = MARCReader('test/one.dat')
+print(record.as_json(indent=2))
+```
+
+```javascript
+{
+  "leader": "01060cam  22002894a 4500",
+  "fields": [
+    {
+      "001": "11778504"
+    }, 
+    {
+      "010": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "   99043581 "
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "100": {
+        "ind1": "1", 
+        "subfields": [
+          {
+            "a": "Hunt, Andrew,"
+          }, 
+          {
+            "d": "1964-"
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "245": {
+        "ind1": "1", 
+        "subfields": [
+          {
+            "a": "The pragmatic programmer :"
+          }, 
+          {
+            "b": "from journeyman to master /"
+          }, 
+          {
+            "c": "Andrew Hunt, David Thomas."
+          }
+        ], 
+        "ind2": "4"
+      }
+    }, 
+    {
+      "260": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "Reading, Mass :"
+          }, 
+          {
+            "b": "Addison-Wesley,"
+          }, 
+          {
+            "c": "2000."
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "300": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "xxiv, 321 p. ;"
+          }, 
+          {
+            "c": "24 cm."
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "504": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "Includes bibliographical references."
+          }
+        ], 
+        "ind2": " "
+      }
+    }, 
+    {
+      "650": {
+        "ind1": " ", 
+        "subfields": [
+          {
+            "a": "Computer programming."
+          }
+        ], 
+        "ind2": "0"
+      }
+    }, 
+    {
+      "700": {
+        "ind1": "1", 
+        "subfields": [
+          {
+            "a": "Thomas, David,"
+          }, 
+          {
+            "d": "1956-"
+          }
+        ], 
+        "ind2": " "
+      }
+    }
+  ]
+}
+```
 
 Support
 -------
