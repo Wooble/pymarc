@@ -48,7 +48,7 @@ class Leader(object):
     """
 
     def __init__(self, leader):
-        # type: (str)
+        # type: (str) -> None
         """Leader is initialized with a string."""
         if len(leader) != LEADER_LEN:
             raise RecordLeaderInvalid
@@ -65,7 +65,7 @@ class Leader(object):
         return getattr(self, item)
 
     def __setitem__(self, item, value):
-        # type: (str, str) -> str
+        # type: (str, str) -> None
         """Set values using position, slice or properties.
 
         leader[5] = "a"
@@ -85,7 +85,7 @@ class Leader(object):
         return self.leader
 
     def _replace_values(self, position, value):
-        # type: (int, str) -> str
+        # type: (int, str) -> None
         """Replaces the values in the leader at `position` by `value`."""
         if position < 0:
             raise IndexError("Position must be positive")
@@ -104,7 +104,7 @@ class Leader(object):
 
     @record_length.setter
     def record_length(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Record length (00-04)."""
         if len(value) != 5:
             raise BadLeaderValue("Record length is 4 chars field, got %s" % value)
@@ -118,7 +118,7 @@ class Leader(object):
 
     @record_status.setter
     def record_status(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Record status (05)."""
         if len(value) != 1:
             raise BadLeaderValue("Record status is 1 char field, got %s" % value)
@@ -132,7 +132,7 @@ class Leader(object):
 
     @type_of_record.setter
     def type_of_record(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Type of record (06)."""
         if len(value) != 1:
             raise BadLeaderValue("Type of record is 1 char field, got %s" % value)
@@ -146,7 +146,7 @@ class Leader(object):
 
     @bibliographic_level.setter
     def bibliographic_level(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Bibliographic level (07)."""
         if len(value) != 1:
             raise BadLeaderValue("Bibliographic level is 1 char field, got %s" % value)
@@ -160,7 +160,7 @@ class Leader(object):
 
     @type_of_control.setter
     def type_of_control(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Type of control (08)."""
         if len(value) != 1:
             raise BadLeaderValue("Type of control is 1 char field, got %s" % value)
@@ -174,7 +174,7 @@ class Leader(object):
 
     @coding_scheme.setter
     def coding_scheme(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Character coding scheme (09)."""
         if len(value) != 1:
             raise BadLeaderValue(
@@ -190,7 +190,7 @@ class Leader(object):
 
     @indicator_count.setter
     def indicator_count(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Indicator count (10)."""
         if len(value) != 1:
             raise BadLeaderValue("Indicator count is 1 char field, got %s" % value)
@@ -204,7 +204,7 @@ class Leader(object):
 
     @subfield_code_count.setter
     def subfield_code_count(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Subfield code count (11)."""
         if len(value) != 1:
             raise BadLeaderValue("Subfield code count is 1 char field, got %s" % value)
@@ -218,7 +218,7 @@ class Leader(object):
 
     @base_address.setter
     def base_address(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Base address of data (12-16)."""
         if len(value) != 5:
             raise BadLeaderValue(
@@ -234,7 +234,7 @@ class Leader(object):
 
     @encoding_level.setter
     def encoding_level(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Encoding level (17)."""
         if len(value) != 1:
             raise BadLeaderValue("Encoding level is 1 char field, got %s" % value)
@@ -248,7 +248,7 @@ class Leader(object):
 
     @cataloging_form.setter
     def cataloging_form(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Descriptive cataloging form (18)."""
         if len(value) != 1:
             raise BadLeaderValue(
@@ -264,7 +264,7 @@ class Leader(object):
 
     @multipart_ressource.setter
     def multipart_ressource(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Multipart resource record level (19)."""
         if len(value) != 1:
             raise BadLeaderValue(
@@ -280,7 +280,7 @@ class Leader(object):
 
     @length_of_field_length.setter
     def length_of_field_length(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Length of the length-of-field portion (20)."""
         if len(value) != 1:
             raise BadLeaderValue(
@@ -296,7 +296,7 @@ class Leader(object):
 
     @starting_character_position_length.setter
     def starting_character_position_length(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Length of the starting-character-position portion (21)."""
         if len(value) != 1:
             raise BadLeaderValue(
@@ -313,7 +313,7 @@ class Leader(object):
 
     @implementation_defined_length.setter
     def implementation_defined_length(self, value):
-        # type: (str) -> str
+        # type: (str) -> None
         """Length of the starting-character-position portion (22)."""
         if len(value) != 1:
             raise BadLeaderValue(
